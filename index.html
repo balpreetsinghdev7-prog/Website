@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kodev | High-Performance Backend Architecture</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0ea5e9', // Sky blue
+                            600: '#0284c7',
+                            900: '#0c4a6e',
+                            dark: '#0f172a', // Slate 900
+                            darker: '#020617', // Slate 950
+                        }
+                    },
+                    animation: {
+                        'blob': 'blob 7s infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        blob: {
+                            '0%': { transform: 'translate(0px, 0px) scale(1)' },
+                            '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
+                            '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+                            '100%': { transform: 'translate(0px, 0px) scale(1)' },
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom scrollbar for that "dev" feel */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #475569;
+        }
+        
+        .code-bg {
+            background-image: radial-gradient(#1e293b 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+    </style>
+</head>
+<body class="bg-brand-darker text-slate-300 font-sans antialiased overflow-x-hidden">
+
+    <!-- Navbar -->
+    <nav class="fixed w-full z-50 transition-all duration-300 backdrop-blur-md bg-brand-darker/80 border-b border-white/10" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Logo -->
+                <div class="flex-shrink-0 flex items-center gap-2 cursor-pointer" onclick="window.scrollTo(0,0)">
+                    <div class="w-20 h-20 rounded-lg flex items-center justify-center text-white font-bold text-xl">
+                        <img src="logo.png" alt="logo">
+                    </div>
+                    <span class="font-bold text-xl tracking-tight text-white">Ko<span class="text-brand-500">Dev</span></span>
+                </div>
+                
+                <!-- Desktop Menu -->
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-8">
+                        <a href="#services" class="hover:text-brand-500 transition-colors px-3 py-2 rounded-md text-sm font-medium">Services</a>
+                        <a href="#tech-stack" class="hover:text-brand-500 transition-colors px-3 py-2 rounded-md text-sm font-medium">Tech Stack</a>
+                        <a href="#process" class="hover:text-brand-500 transition-colors px-3 py-2 rounded-md text-sm font-medium">Process</a>
+                        <a href="#contact" class="bg-brand-600 hover:bg-brand-500 text-white px-5 py-2.5 rounded-full text-sm font-medium transition-all shadow-lg shadow-brand-500/25 hover:shadow-brand-500/40">
+                            Get Started
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Mobile menu button -->
+                <div class="-mr-2 flex md:hidden">
+                    <button type="button" onclick="toggleMobileMenu()" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
+                        <span class="sr-only">Open main menu</span>
+                        <i class="fa-solid fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Panel -->
+        <div class="hidden md:hidden bg-brand-dark border-b border-white/10" id="mobile-menu">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="#services" class="text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Services</a>
+                <a href="#tech-stack" class="text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Tech Stack</a>
+                <a href="#process" class="text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Process</a>
+                <a href="#contact" class="text-white bg-brand-600 hover:bg-brand-700 block px-3 py-2 rounded-md text-base font-medium">Get Started</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden">
+        <!-- Background Effects -->
+        <div class="absolute inset-0 code-bg opacity-30"></div>
+        <div class="absolute top-0 -left-4 w-72 h-72 bg-brand-500 rounded-full mix-blend-multiply filter blur-xl opacity-10 animate-blob"></div>
+        <div class="absolute top-0 -right-4 w-72 h-72 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl opacity-10 animate-blob animation-delay-2000"></div>
+        <div class="absolute -bottom-8 left-20 w-72 h-72 bg-indigo-500 rounded-full mix-blend-multiply filter blur-xl opacity-10 animate-blob animation-delay-4000"></div>
+
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center">
+            <div class="w-full md:w-1/2 text-center md:text-left z-10">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-500/10 border border-brand-500/20 text-brand-400 text-sm font-mono mb-6">
+                    <span class="w-2 h-2 rounded-full bg-brand-400 animate-pulse"></span>
+                    Backend Architecture Specialists
+                </div>
+                <h1 class="text-4xl md:text-6xl font-bold tracking-tight text-white mb-6 leading-tight">
+                    Architecting the <br>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-400 to-purple-400">Invisible Engine</span>
+                    <br>of Your Success
+                </h1>
+                <p class="text-lg text-slate-400 mb-8 max-w-2xl mx-auto md:mx-0 leading-relaxed">
+                    We build robust, scalable, and secure backend APIs that power modern web and mobile applications. Stop worrying about server uptime and database queries—focus on your product.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
+                    <a href="#contact" class="px-8 py-4 bg-brand-600 hover:bg-brand-500 text-white rounded-lg font-bold shadow-lg shadow-brand-500/25 transition-all transform hover:-translate-y-1 flex items-center justify-center gap-2">
+                        Start Your Project
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                    <a href="#services" class="px-8 py-4 bg-white/5 hover:bg-white/10 border border-white/10 text-white rounded-lg font-bold backdrop-blur-sm transition-all flex items-center justify-center gap-2">
+                        View Services
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Hero Graphic (Abstract Code Visual) -->
+            <div class="w-full md:w-1/2 mt-16 md:mt-0 relative animate-float hidden md:block">
+                <div class="bg-slate-900 border border-slate-700 rounded-xl p-4 shadow-2xl max-w-lg mx-auto transform rotate-1 hover:rotate-0 transition-transform duration-500">
+                    <div class="flex gap-2 mb-4">
+                        <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                        <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                        <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                    </div>
+                    <div class="font-mono text-sm space-y-2">
+                        <div class="flex">
+                            <span class="text-purple-400 mr-2">const</span>
+                            <span class="text-blue-400">KoDev</span>
+                            <span class="text-white mx-2">=</span>
+                            <span class="text-purple-400">async</span>
+                            <span class="text-white">(</span>
+                            <span class="text-orange-300">clientNeeds</span>
+                            <span class="text-white">)</span>
+                            <span class="text-white mx-2">=></span>
+                            <span class="text-white">{</span>
+                        </div>
+                        <div class="pl-4">
+                            <span class="text-slate-500">// Initialize scalable infrastructure</span>
+                        </div>
+                        <div class="pl-4">
+                            <span class="text-purple-400">const</span>
+                            <span class="text-blue-400">api</span>
+                            <span class="text-white mx-2">=</span>
+                            <span class="text-green-400">new</span>
+                            <span class="text-yellow-300">ScalableAPI</span>
+                            <span class="text-white">();</span>
+                        </div>
+                         <div class="pl-4">
+                            <span class="text-purple-400">await</span>
+                            <span class="text-blue-400">api</span>
+                            <span class="text-white">.</span>
+                            <span class="text-yellow-300">optimize</span>
+                            <span class="text-white">({</span>
+                        </div>
+                         <div class="pl-8">
+                            <span class="text-blue-300">security</span>
+                            <span class="text-white">:</span>
+                            <span class="text-orange-300">'High'</span>
+                            <span class="text-white">,</span>
+                        </div>
+                         <div class="pl-8">
+                            <span class="text-blue-300">latency</span>
+                            <span class="text-white">:</span>
+                            <span class="text-orange-300">'Low'</span>
+                        </div>
+                         <div class="pl-4">
+                            <span class="text-white">});</span>
+                        </div>
+                        <div class="pl-4">
+                            <span class="text-purple-400">return</span>
+                            <span class="text-blue-400">api</span>
+                            <span class="text-white">.</span>
+                            <span class="text-yellow-300">launch</span>
+                            <span class="text-white">();</span>
+                        </div>
+                        <div class="text-white">}</div>
+                    </div>
+                </div>
+                <!-- Floating Badge -->
+                <div class="absolute -bottom-6 -right-6 bg-brand-600 text-white p-4 rounded-lg shadow-xl border border-white/10">
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid fa-check-circle text-2xl"></i>
+                        <div>
+                            <p class="font-bold">99.99% Uptime</p>
+                            <p class="text-xs text-brand-100">Guaranteed reliability</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="py-24 bg-brand-dark relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-brand-500 font-semibold tracking-wide uppercase text-sm mb-2">Our Expertise</h2>
+                <h3 class="text-3xl md:text-4xl font-bold text-white mb-4">Backend Solutions for Every Scale</h3>
+                <p class="text-slate-400 max-w-2xl mx-auto">We don't just write code; we engineer systems designed to handle growth, ensuring your data is secure and accessible.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Service 1 -->
+                <div class="bg-white/5 border border-white/5 rounded-2xl p-8 hover:bg-white/10 transition-colors duration-300 group">
+                    <div class="w-14 h-14 bg-blue-500/20 rounded-xl flex items-center justify-center text-blue-400 text-2xl mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-network-wired"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-white mb-3">RESTful APIs</h4>
+                    <p class="text-slate-400 leading-relaxed">Custom-built APIs that are well-documented, type-safe, and designed for seamless frontend integration.</p>
+                </div>
+
+                <!-- Service 2 -->
+                <div class="bg-white/5 border border-white/5 rounded-2xl p-8 hover:bg-white/10 transition-colors duration-300 group">
+                    <div class="w-14 h-14 bg-purple-500/20 rounded-xl flex items-center justify-center text-purple-400 text-2xl mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-database"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-white mb-3">Database Architecture</h4>
+                    <p class="text-slate-400 leading-relaxed">Optimized schema design for SQL databases. We ensure data integrity and fast query performance.</p>
+                </div>
+
+                <!-- Service 3 -->
+                <div class="bg-white/5 border border-white/5 rounded-2xl p-8 hover:bg-white/10 transition-colors duration-300 group">
+                    <div class="w-14 h-14 bg-green-500/20 rounded-xl flex items-center justify-center text-green-400 text-2xl mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-cloud"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-white mb-3">Cloud</h4>
+                    <p class="text-slate-400 leading-relaxed">Deployment on AWS or Google Cloud, or Azure using Docker</p>
+                </div>
+
+                <!-- Service 4 -->
+                <div class="bg-white/5 border border-white/5 rounded-2xl p-8 hover:bg-white/10 transition-colors duration-300 group">
+                    <div class="w-14 h-14 bg-red-500/20 rounded-xl flex items-center justify-center text-red-400 text-2xl mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-shield-halved"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-white mb-3">Security & Auth</h4>
+                    <p class="text-slate-400 leading-relaxed">Implementation of OAuth2, JWT, and role-based access control. We prioritize security at every layer.</p>
+                </div>
+
+                <!-- Service 5 -->
+                <div class="bg-white/5 border border-white/5 rounded-2xl p-8 hover:bg-white/10 transition-colors duration-300 group">
+                    <div class="w-14 h-14 bg-orange-500/20 rounded-xl flex items-center justify-center text-orange-400 text-2xl mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-arrows-spin"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-white mb-3">Microservices</h4>
+                    <p class="text-slate-400 leading-relaxed">Decomposing monolithic applications into manageable, independent services for better scalability.</p>
+                </div>
+
+                <!-- Service 6 -->
+                <div class="bg-white/5 border border-white/5 rounded-2xl p-8 hover:bg-white/10 transition-colors duration-300 group">
+                    <div class="w-14 h-14 bg-cyan-500/20 rounded-xl flex items-center justify-center text-cyan-400 text-2xl mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-bolt"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-white mb-3">Real-time Systems</h4>
+                    <p class="text-slate-400 leading-relaxed">WebSockets and event-driven architectures for chat apps, live notifications, and streaming data.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tech Stack / Logo Cloud -->
+    <section id="tech-stack" class="py-16 bg-brand-darker border-y border-white/5">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <p class="text-center text-slate-500 mb-8 font-mono text-sm">POWERED BY MODERN TECHNOLOGY</p>
+            <div class="flex flex-wrap justify-center gap-8 md:gap-16 opacity-70 grayscale hover:grayscale-0 transition-all duration-500">
+                <!-- Tech items represented by simple text/icon layout for compatibility -->
+                <div class="flex items-center gap-2 text-xl font-bold text-blue-400"><i class="fa-brands fa-docker"></i> Docker</div>
+                <div class="flex items-center gap-2 text-xl font-bold text-orange-400"><i class="fa-brands fa-aws"></i> AWS</div>
+                <div class="flex items-center gap-2 text-xl font-bold text-blue-600"><i class="fa-solid fa-database"></i> MySQL</div>
+                <div class="flex items-center gap-2 text-xl font-bold text-purple-500"><i class="fa-solid fa-code"></i> Kotlin</div>
+                <div class="flex items-center gap-2 text-xl font-bold text-purple-300"><i class="fa-solid fa-server"></i> Ktor</div>
+                <div class="flex items-center gap-2 text-xl font-bold text-red-400"><i class="fa-brands fa-jenkins"></i> Jenkins</div>
+                <div class="flex items-center gap-2 text-xl font-bold text-red-500"><i class="fa-solid fa-layer-group"></i> Redis</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Choose Us / Process -->
+    <section id="process" class="py-24 bg-brand-dark overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col lg:flex-row gap-16 items-center">
+                <div class="lg:w-1/2">
+                    <h2 class="text-3xl md:text-4xl font-bold text-white mb-6">Why trust your backend to KoDev?</h2>
+                    <div class="space-y-8">
+                        <div class="flex gap-4">
+                            <div class="flex-shrink-0 w-10 h-10 rounded-full bg-brand-900 flex items-center justify-center text-brand-400 font-bold border border-brand-500/20">1</div>
+                            <div>
+                                <h4 class="text-white font-bold text-lg mb-1">Architecture First Approach</h4>
+                                <p class="text-slate-400 text-sm">We plan before we code. A solid foundation prevents technical debt down the road.</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4">
+                            <div class="flex-shrink-0 w-10 h-10 rounded-full bg-brand-900 flex items-center justify-center text-brand-400 font-bold border border-brand-500/20">2</div>
+                            <div>
+                                <h4 class="text-white font-bold text-lg mb-1">Performance Obsessed</h4>
+                                <p class="text-slate-400 text-sm">We optimize database queries and caching strategies to shave off milliseconds.</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4">
+                            <div class="flex-shrink-0 w-10 h-10 rounded-full bg-brand-900 flex items-center justify-center text-brand-400 font-bold border border-brand-500/20">3</div>
+                            <div>
+                                <h4 class="text-white font-bold text-lg mb-1">Transparent Communication</h4>
+                                <p class="text-slate-400 text-sm">Weekly sprints, clear documentation (Swagger/OpenAPI), and direct access to developers.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="lg:w-1/2 relative">
+                    <!-- Code snippet card -->
+                    <div class="bg-[#1e1e1e] rounded-xl shadow-2xl p-6 border border-gray-700 font-mono text-sm relative z-10">
+                        <div class="flex gap-2 mb-4 border-b border-gray-700 pb-2">
+                            <span class="text-gray-500">terminal</span>
+                        </div>
+                        <div class="text-green-400">$ curl -X GET https://api.yourbusiness.com/v1/stats</div>
+                        <div class="text-gray-300 mt-2">{</div>
+                        <div class="pl-4 text-blue-300">"status": <span class="text-orange-300">"healthy"</span>,</div>
+                        <div class="pl-4 text-blue-300">"uptime": <span class="text-orange-300">"99.99%"</span>,</div>
+                        <div class="pl-4 text-blue-300">"latency": <span class="text-orange-300">"12ms"</span>,</div>
+                        <div class="pl-4 text-blue-300">"requests_handled": <span class="text-purple-300">1045020</span></div>
+                        <div class="text-gray-300">}</div>
+                    </div>
+                    <!-- Decor elements -->
+                    <div class="absolute -top-10 -right-10 w-40 h-40 bg-brand-500/20 rounded-full blur-2xl"></div>
+                    <div class="absolute -bottom-10 -left-10 w-40 h-40 bg-purple-500/20 rounded-full blur-2xl"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA / Contact Section -->
+    <section id="contact" class="py-24 relative">
+        <div class="absolute inset-0 bg-gradient-to-br from-brand-900 to-brand-darker opacity-90"></div>
+        <div class="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-3xl md:text-5xl font-bold text-white mb-6">Ready to Scale?</h2>
+            <p class="text-xl text-brand-100 mb-10">Let's discuss your architecture needs. First consultation is free.</p>
+            
+            <form onsubmit="sendEmail(event)" class="bg-white/5 backdrop-blur-md p-8 rounded-2xl border border-white/10 shadow-2xl text-left max-w-2xl mx-auto">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <div>
+                        <label class="block text-sm font-medium text-slate-300 mb-2">Name</label>
+                        <input type="text" id="contact-name" class="w-full bg-brand-darker/50 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-colors" placeholder="John Doe" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-300 mb-2">Email</label>
+                        <input type="email" id="contact-email" class="w-full bg-brand-darker/50 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-colors" placeholder="john@company.com" required>
+                    </div>
+                </div>
+                <div class="mb-6">
+                    <label class="block text-sm font-medium text-slate-300 mb-2">Project Details</label>
+                    <textarea id="contact-message" rows="4" class="w-full bg-brand-darker/50 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-colors" placeholder="Tell us about your API requirements..." required></textarea>
+                </div>
+                <button type="submit" class="w-full bg-brand-600 hover:bg-brand-500 text-white font-bold py-4 rounded-lg shadow-lg shadow-brand-500/30 transition-all transform active:scale-95">
+                    Send Message
+                </button>
+                <!-- NEW: Display email address explicitly -->
+                <p class="mt-4 text-center text-sm text-slate-400">
+                    Or contact us directly at <a href="mailto:contact@kodev.site" class="text-brand-400 font-medium hover:text-brand-300 transition-colors">contact@kodev.site</a>
+                </p>
+                <!-- END NEW -->
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-brand-darker border-t border-white/5 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="flex items-center gap-2 mb-4 md:mb-0">
+                    <div class="w-20 h-20 rounded flex items-center justify-center text-white text-sm">
+                        <img src="logo.png" alt="logo">
+                    </div>
+                    <span class="font-bold text-lg text-white">Ko<span class="text-brand-500">Dev</span></span>
+                </div>
+                <div class="text-slate-500 text-sm mb-4 md:mb-0">
+                    © 2025 KoDev. All rights reserved.
+                </div>
+                <div class="flex space-x-6">
+                    <!-- <a href="#" class="text-slate-400 hover:text-white transition-colors"><i class="fa-brands fa-github text-xl"></i></a>
+                    <a href="#" class="text-slate-400 hover:text-white transition-colors"><i class="fa-brands fa-twitter text-xl"></i></a>
+                    <a href="#" class="text-slate-400 hover:text-white transition-colors"><i class="fa-brands fa-linkedin text-xl"></i></a> -->
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript for Mobile Menu & Navbar Interaction -->
+    <script>
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        // Add sticky navbar shadow on scroll
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 10) {
+                navbar.classList.add('shadow-lg');
+            } else {
+                navbar.classList.remove('shadow-lg');
+            }
+        });
+
+        // Email composition handling
+        function sendEmail(event) {
+            event.preventDefault();
+            const name = document.getElementById('contact-name').value;
+            const email = document.getElementById('contact-email').value;
+            const message = document.getElementById('contact-message').value;
+            
+            // Construct the mailto link
+            // Please update this email address to your actual contact email
+            const destinationEmail = "contact@kodev.site"; 
+            
+            const subject = encodeURIComponent(`Project Inquiry from ${name}`);
+            const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\nProject Details:\n${message}`);
+            
+            window.location.href = `mailto:${destinationEmail}?subject=${subject}&body=${body}`;
+        }
+    </script>
+</body>
+</html>
