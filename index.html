@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
-<head>
+<html lang="en" class="scroll-smooth"><head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kodev | High-Performance Backend Architecture</title>
@@ -12,7 +11,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet">
 
     <script>
         tailwind.config = {
@@ -75,7 +74,6 @@
             background-size: 20px 20px;
         }
     </style>
-</head>
 <body class="bg-brand-darker text-slate-300 font-sans antialiased overflow-x-hidden">
 
     <!-- Navbar -->
@@ -96,6 +94,9 @@
                         <a href="#services" class="hover:text-brand-500 transition-colors px-3 py-2 rounded-md text-sm font-medium">Services</a>
                         <a href="#tech-stack" class="hover:text-brand-500 transition-colors px-3 py-2 rounded-md text-sm font-medium">Tech Stack</a>
                         <a href="#process" class="hover:text-brand-500 transition-colors px-3 py-2 rounded-md text-sm font-medium">Process</a>
+                        <a href="https://blog.kodev.site" class="hover:text-brand-500 transition-colors px-3 py-2 rounded-md text-sm font-medium flex items-center gap-1">
+                            Blog <i class="fa-solid fa-arrow-up-right-from-square text-[10px] opacity-50"></i>
+                        </a>
                         <a href="#contact" class="bg-brand-600 hover:bg-brand-500 text-white px-5 py-2.5 rounded-full text-sm font-medium transition-all shadow-lg shadow-brand-500/25 hover:shadow-brand-500/40">
                             Get Started
                         </a>
@@ -118,6 +119,7 @@
                 <a href="#services" class="text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Services</a>
                 <a href="#tech-stack" class="text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Tech Stack</a>
                 <a href="#process" class="text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Process</a>
+                <a href="https://blog.kodev.site" class="text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Blog</a>
                 <a href="#contact" class="text-white bg-brand-600 hover:bg-brand-700 block px-3 py-2 rounded-md text-base font-medium">Get Started</a>
             </div>
         </div>
@@ -150,6 +152,9 @@
                         Start Your Project
                         <i class="fa-solid fa-arrow-right"></i>
                     </a>
+                    <a href="https://blog.kodev.site" class="px-8 py-4 bg-white/5 hover:bg-white/10 border border-white/10 text-white rounded-lg font-bold backdrop-blur-sm transition-all flex items-center justify-center gap-2">
+                        Read Our Blog
+                    </a>
                     <a href="#services" class="px-8 py-4 bg-white/5 hover:bg-white/10 border border-white/10 text-white rounded-lg font-bold backdrop-blur-sm transition-all flex items-center justify-center gap-2">
                         View Services
                     </a>
@@ -173,7 +178,7 @@
                             <span class="text-white">(</span>
                             <span class="text-orange-300">clientNeeds</span>
                             <span class="text-white">)</span>
-                            <span class="text-white mx-2">=></span>
+                            <span class="text-white mx-2">=&gt;</span>
                             <span class="text-white">{</span>
                         </div>
                         <div class="pl-4">
@@ -274,7 +279,7 @@
                     <div class="w-14 h-14 bg-red-500/20 rounded-xl flex items-center justify-center text-red-400 text-2xl mb-6 group-hover:scale-110 transition-transform">
                         <i class="fa-solid fa-shield-halved"></i>
                     </div>
-                    <h4 class="text-xl font-bold text-white mb-3">Security & Auth</h4>
+                    <h4 class="text-xl font-bold text-white mb-3">Security &amp; Auth</h4>
                     <p class="text-slate-400 leading-relaxed">Implementation of OAuth2, JWT, and role-based access control. We prioritize security at every layer.</p>
                 </div>
 
@@ -379,16 +384,16 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                     <div>
                         <label class="block text-sm font-medium text-slate-300 mb-2">Name</label>
-                        <input type="text" id="contact-name" class="w-full bg-brand-darker/50 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-colors" placeholder="John Doe" required>
+                        <input type="text" id="contact-name" class="w-full bg-brand-darker/50 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-colors" placeholder="John Doe" required="">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-slate-300 mb-2">Email</label>
-                        <input type="email" id="contact-email" class="w-full bg-brand-darker/50 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-colors" placeholder="john@company.com" required>
+                        <input type="email" id="contact-email" class="w-full bg-brand-darker/50 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-colors" placeholder="john@company.com" required="">
                     </div>
                 </div>
                 <div class="mb-6">
                     <label class="block text-sm font-medium text-slate-300 mb-2">Project Details</label>
-                    <textarea id="contact-message" rows="4" class="w-full bg-brand-darker/50 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-colors" placeholder="Tell us about your API requirements..." required></textarea>
+                    <textarea id="contact-message" rows="4" class="w-full bg-brand-darker/50 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-colors" placeholder="Tell us about your API requirements..." required=""></textarea>
                 </div>
                 <button type="submit" class="w-full bg-brand-600 hover:bg-brand-500 text-white font-bold py-4 rounded-lg shadow-lg shadow-brand-500/30 transition-all transform active:scale-95">
                     Send Message
@@ -458,5 +463,5 @@
             window.location.href = `mailto:${destinationEmail}?subject=${subject}&body=${body}`;
         }
     </script>
-</body>
-</html>
+
+</body></html>
